@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category   Scommerce
+ * @author     Scommerce Mage <core@scommerce-mage.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Console commands -->
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="scanalyticssync" xsi:type="object">Scommerce\AnalyticsSync\Console\Command\Synchronize</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Logger -->
+    <type name="Scommerce\AnalyticsSync\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Scommerce\AnalyticsSync\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">scAnalyticsLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Scommerce\AnalyticsSync\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Scommerce\AnalyticsSync\Api\Data\SyncLogInterface" type="Scommerce\AnalyticsSync\Model\SyncLog" />
+    <preference for="Scommerce\AnalyticsSync\Api\SyncLogRepositoryInterface" type="Scommerce\AnalyticsSync\Model\SyncLogRepository" />
+
+    <virtualType name="Scommerce\AnalyticsSync\Model\ResourceModel\SyncLog\SyncLog\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">sc_gasynclog</argument>
+            <argument name="resourceModel" xsi:type="string">Scommerce\AnalyticsSync\Model\ResourceModel\SyncLog</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="gasynclog_grid_list_data_source" xsi:type="string">Scommerce\AnalyticsSync\Model\ResourceModel\SyncLog\SyncLog\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Scommerce\AnalyticsSync\Console\Command\Synchronize">
+        <arguments>
+            <argument name="synchronizer" xsi:type="object">Scommerce\AnalyticsSync\Model\AnalyticsSync\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Scommerce\AnalyticsSync\Cron\Synchronizer">
+        <arguments>
+            <argument name="synchronizer" xsi:type="object">Scommerce\AnalyticsSync\Model\AnalyticsSync\Proxy</argument>
+        </arguments>
+    </type>
+</config>

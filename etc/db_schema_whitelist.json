@@ -1,0 +1,29 @@
+{
+    "quote": {
+        "column": {
+            "sc_tracking_info": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "sc_tracking_info": true,
+            "sc_transaction_sent": true,
+            "sc_transaction_sent_ga4": true
+        }
+    },
+    "sc_gasynclog": {
+        "column": {
+            "log_id": true,
+            "increment_id": true,
+            "tracking_data": true,
+            "status": true,
+            "error_message": true,
+            "store_id": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SC_GASYNCLOG_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

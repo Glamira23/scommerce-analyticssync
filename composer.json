@@ -1,0 +1,27 @@
+{
+  "name": "scommerce/analyticssync",
+  "description": "Google Analytics Synchronization Module For Magento 2.0",
+  "require": {
+    "php": ">=7.2.0",
+    "scommerce/core": "2.0.*",
+    "google/apiclient": "^2.9",
+    "google/analytics-data": "^0.8.1"
+  },
+  "type": "magento2-module",
+  "license": "Commercial",
+  "version": "2.0.13",
+  "authors": [
+    {
+      "name": "Scommerce Mage",
+      "email": "core@scommerce-mage.com"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Scommerce\\AnalyticsSync\\": ""
+    }
+  }
+}

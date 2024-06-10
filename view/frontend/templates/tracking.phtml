@@ -1,0 +1,80 @@
+<?php
+/** @var $block Magento\Framework\View\Element\Template */
+$url = $block->getRequest()->getOriginalPathInfo();
+$viewModel = $block->getViewModel();
+if (!$url) {
+    $url = "/";
+}
+$gaCookie = '';
+if ($gaCookie = $viewModel->getContainerId()) {
+    $gaCookie = '_ga_' . $gaCookie;
+}
+?>
+<script>
+    require([
+        'jquery',
+        'mage/cookies',
+        'Scommerce_AnalyticsSync/js/sourcebuster',
+        'domReady!'
+    ], function($, cookies, sbjs) {
+
+        sbjs.init();
+
+        function setCookie(name, value) {
+           let date = new Date();
+           let minutes = 60 * 24 * 365;
+           date.setTime(date.getTime() + (minutes * 60 * 1000));
+           $.cookie(name, value, { expires: date, path: '/' });
+        }
+
+        function setSessionCookie(name, value) {
+           $.cookie(name, value, { path: '/' });
+        }
+
+        <?php if ($url): ?>
+        let landingUrl = $.cookie('sc_lurl');
+        if (!landingUrl) {
+            setSessionCookie('sc_lurl', '<?=  /* @noEscape */ $url ?>')
+        }
+        <?php endif; ?>
+
+        window.addEventListener('load', function() {
+            var gaClientId = null;
+            setTimeout(function() {
+                var resCookie = [];
+                if (window.ga && ga.create) {
+                    resCookie.push("gab=0");
+                    ga(function() {
+                        let tracker = ga.getAll()[0];
+                        if (tracker != undefined) {
+                            let clientId = tracker.get('clientId');
+                            gaClientId = clientId;
+                            setCookie('scgacid', clientId);
+                        } else if (window.gaGlobal != undefined) {
+                            setCookie('scgacid', window.gaGlobal.vid);
+                        }
+                    });
+                } else {
+                    resCookie.push("gab=1");
+                    if (window.gaGlobal != undefined) {
+                        setCookie('scgacid', window.gaGlobal.vid);
+                    }
+                }
+
+                if (window.google_tag_manager) {
+                    resCookie.push("gtmb=0");
+                } else {
+                    resCookie.push("gtmb=1");
+                }
+                setCookie('gagtmblock', resCookie.join("|||"));
+
+                <?php if ($gaCookie): ?>
+                let gaC = $.cookie('<?php echo $gaCookie; ?>');
+                if (gaC) {
+                    setCookie('scgacookie', gaC);
+                }
+                <?php endif; ?>
+            }, 3000);
+        }, false);
+    });
+</script>

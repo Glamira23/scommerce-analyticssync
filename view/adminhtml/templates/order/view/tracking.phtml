@@ -1,0 +1,39 @@
+<?php
+/**
+ *
+ */
+?>
+
+<div class="admin__page-section-title">
+    <span class="title"><?= /* @noEscape */ __('Order Tracking Info') ?></span>
+</div>
+<?php
+/** @var Scommerce\AnalyticsSync\Block\Adminhtml\Order\View\TrackingBlock $block */
+$order = $block->getOrder();
+$tracking = $block->getTrackingInfo();
+?>
+
+<?php if ($tracking): ?>
+    <div class="admin__page-section-item-content">
+        <table class="admin__table-secondary order-information-table">
+            <tbody>
+            <?= /* @noEscape */ $block->renderItem($tracking, "mdm"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "src"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "cmp"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "cnt"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "trm"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "typ"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "vst"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "uip"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "uag"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "Browser"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "Device Type"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "OS"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "gab", "yesno"); ?>
+            <?= /* @noEscape */ $block->renderItem($tracking, "gtmb", "yesno"); ?>
+            <?= /* @noEscape */ $block->getCid(); ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="clear"></div>
+<?php endif; ?>

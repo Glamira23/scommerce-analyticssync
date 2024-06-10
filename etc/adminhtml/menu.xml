@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * AnalyticsSync
+
+ * @category   Scommerce
+ * @author     Scommerce Mage <core@scommerce-mage.com>
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Scommerce_AnalyticsSync::gasynclog"
+             title="Manage GA Sync Logs"
+             module="Scommerce_AnalyticsSync"
+             sortOrder="100"
+             parent="Magento_Backend::system"
+             resource="Scommerce_AnalyticsSync::gasynclog"
+             dependsOnConfig="scommerce_analytics_sync/general/enabled" />
+        <add id="Scommerce_AnalyticsSync::grid"
+             title="GA Sync Logs"
+             module="Scommerce_AnalyticsSync"
+             sortOrder="50"
+             parent="Scommerce_AnalyticsSync::gasynclog"
+             action="gasynclog/index/index"
+             resource="Scommerce_AnalyticsSync::grid"
+             dependsOnConfig="scommerce_analytics_sync/general/enabled"/>
+    </menu>
+
+</config>
+

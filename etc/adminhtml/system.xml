@@ -1,0 +1,437 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Scommerce AnalyticsSync Module configuration file for defining all configurations required for this module
+ * @category   Scommerce
+ * @author     Scommerce Mage <core@scommerce-mage.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="scommerce" translate="label comment" sortOrder="400">
+            <label>Scommerce Configuration</label>
+        </tab>
+        <section id="scommerce_analytics_sync"
+                 translate="label"
+                 type="text"
+                 sortOrder="250"
+                 showInDefault="1"
+                 showInWebsite="1"
+                 showInStore="1">
+            <label>Google Analytics Synchronization</label>
+            <tab>scommerce</tab>
+            <!-- resource tag name which we have to defined in the acl.xml -->
+            <resource>Scommerce_AnalyticsSync::gasync</resource>
+            <group id="general"
+                   translate="label"
+                   type="text"
+                   sortOrder="10"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>General</label>
+                <field id="enabled"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting will be used to enable or disable module]]></comment>
+                </field>
+                <field id="license_key"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="30"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>License Key</label>
+                    <comment><![CDATA[This setting will verify your license key for the give domain <div style='color:#ff0000;font-size:10px;font-weight:bold'>N.B. License keys are domain specific so for your testing or staging sites please email us at core@scommerce-mage.com</div>]]></comment>
+                </field>
+                <field id="enable_ua_sync"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Enable synchronisation with UA]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="application_name"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="40"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Application Name</label>
+                    <comment><![CDATA[This should be the name of the project or application name from Google Console (https://console.developers.google.com/iam-admin/projects)]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="security_key"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="50"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Security Key (JSON)</label>
+                    <comment><![CDATA[This JSON file you get when you create app engine default service account credential in Google Console(https://console.developers.google.com/apis/credentials) and should be uploaded to /var/ directory of your magento store]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="google_view_id"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="60"
+                       showInDefault="0"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="0">
+                    <label>Google View ID</label>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                    <comment><![CDATA[Retrieve View ID from your Google Analytic account under Admin -> Click View Settings -> View ID]]></comment>
+                </field>
+                <field id="order_status_exclude"
+                       translate="label comment"
+                       type="multiselect"
+                       sortOrder="70"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Exclude Order Statuses</label>
+                    <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                    <comment><![CDATA[Exclude order statuses which you don't want to synch with Google Analytics]]></comment>
+                </field>
+                <field id="payment_methods" translate="label" type="multiselect" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Exclude Payment Methods</label>
+                    <source_model>Scommerce\AnalyticsSync\Model\Config\ActivePaymentMethods</source_model>
+                    <can_be_empty>1</can_be_empty>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                    <comment>Select payment methods. For these payment methods data will not be send.</comment>
+                </field>
+                <field id="analytics_account_id"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="80"
+                       showInDefault="0"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="0">
+                    <label>Analytics Account Id</label>
+                    <comment>Put here UA account ID. Example: UA-12345678</comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="orders_days_skip"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="85"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Orders Days Skip</label>
+                    <comment><![CDATA[This setting will skip checking days. By default it will skip 2 days. 0 means today orders. <i>To minimize possibility of duplicate transactions in GA we still keep 1 hour gap</i>]]></comment>
+                    <validate>validate-number</validate>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="skip_hours"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="87"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Skip Hours</label>
+                    <comment><![CDATA[How many hours to skip to get orders. By default it will skip 4 hours. <i>Small value increases possibility of duplicate transactions in GA</i>]]></comment>
+                    <validate>validate-number</validate>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/orders_days_skip">0</field>
+                    </depends>
+                </field>
+                <field id="send_base_data"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="90"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Send Base Data</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Set 'Yes' if you want to send base order data and 'No' to send store order data to Google]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="send_phone_order_transaction"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="120"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Send Phone or Admin Orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                    <comment><![CDATA[Enable this feature only if you want to send admin orders on order creation]]></comment>
+                </field>
+                <field id="admin_source"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="130"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Source</label>
+                    <comment><![CDATA[You can add your source here to pass this to Google for admin orders]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                        <field id="scommerce_analytics_sync/general/send_phone_order_transaction">1</field>
+                    </depends>
+                </field>
+                <field id="admin_medium"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="140"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Medium</label>
+                    <comment><![CDATA[You can add your medium here to pass this to Google for admin orders]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                        <field id="scommerce_analytics_sync/general/send_phone_order_transaction">1</field>
+                    </depends>
+                </field>
+                <field id="brand_dropdown"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="150"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Brand Attribute</label>
+                    <source_model>Scommerce\AnalyticsSync\Model\Source\Brand</source_model>
+                    <comment><![CDATA[Select product attribute which you use to set your brand names]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="brand_text"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="160"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Brand text box</label>
+                    <comment><![CDATA[You can add your brand name here to pass this to Google]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="default_landing_page"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="163"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Default Landing Page</label>
+                    <comment><![CDATA[Default landing page for sending to google]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="cron_schedule"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="165"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0"
+                       canRestore="0">
+                    <label>Cron schedule</label>
+                    <comment>
+                        <![CDATA[
+This setting will send the email through the cron (default - Midnight)
+<pre>
+*
+| | | | |
+| | | | +---- Day of the Week (range: 1-7, 1)
+| | | +------ Month of the Year (range: 1-12)
+| | +-------- Day of the Month (range: 1-31)
+| +---------- Hour (range: 0-23)
++------------ Minute (range: 0-59)
+Example: 0 0 * Daily at midnight
+</pre>
+]]>
+                    </comment>
+                </field>
+                <field id="debugging"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="170"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0"
+                       canRestore="1">
+                    <label>Debugging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="test_mode"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="180"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0"
+                       canRestore="1">
+                    <label>Test Mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Use this option to log only but without sending anything to Google</comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="ga4"
+                   translate="label"
+                   type="text"
+                   sortOrder="10"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>GA4</label>
+                <comment>GA4 synch needs to be enabled</comment>
+                <field id="enable"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="10"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0"
+                       canRestore="1">
+                    <label>Synch GA4</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Use this option to use GA4 synch</comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="api_secret"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="0">
+                    <label>API Secret</label>
+                    <comment><![CDATA[API secret key can be created by going into GA4>Admin>Data Streams>Select website>Measurement Protocol API Secrets>Create enter the name and click on create to get the key]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                        <field id="scommerce_analytics_sync/ga4/enable">1</field>
+                    </depends>
+                </field>
+                <field id="measurement_id"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="30"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="0">
+                    <label>Measurement ID</label>
+                    <comment><![CDATA[Ga4 measurement ID can be extracted from GA4>Admin>Data Streams>Select website and it is available in the top right corner]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                        <field id="scommerce_analytics_sync/ga4/enable">1</field>
+                    </depends>
+                </field>
+                <field id="property_id"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="40"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="0">
+                    <label>Property ID</label>
+                    <comment><![CDATA[GA4 Property ID]]></comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                        <field id="scommerce_analytics_sync/ga4/enable">1</field>
+                    </depends>
+                </field>
+                <field id="skip_days"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="0">
+                    <label>Skip Order days</label>
+                    <comment><![CDATA[Number of days will be skipped before sending to GA4. Please put greater than 0 value. We would strongly recommend to set this to 2 days or more becuase GA4 transactions could take upto 48 hours to push to GA]]></comment>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                        <field id="scommerce_analytics_sync/ga4/enable">1</field>
+                    </depends>
+                </field>
+                <field id="send_on_invoice_creation"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="30"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Send GA4 data on invoice creation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Use this option to send GA4 data on invoice creation</comment>
+                    <depends>
+                        <field id="scommerce_analytics_sync/general/enabled">1</field>
+                        <field id="scommerce_analytics_sync/ga4/enable">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

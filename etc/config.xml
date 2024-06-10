@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Scommerce AnalyticsSync Module default configuration file for setting all default values
+ * @category   Scommerce
+ * @author     Scommerce Mage <core@scommerce-mage.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <scommerce_analytics_sync>
+            <general>
+                <enabled>0</enabled>
+                <enable_ua_sync>0</enable_ua_sync>
+                <license_key>[CHECK YOUR ORDER CONFIRMATION EMAIL FOR LICENSE KEY]</license_key>
+                <orders_days_skip>2</orders_days_skip>
+                <cron_schedule>0 */4 * * *</cron_schedule>
+                <debugging>1</debugging>
+                <order_status_exclude>fraud,holded,closed,canceled</order_status_exclude>
+                <admin_source>admin</admin_source>
+                <admin_medium>phone</admin_medium>
+                <default_landing_page>/</default_landing_page>
+                <skip_hours>4</skip_hours>
+            </general>
+            <ga4>
+                <enable>0</enable>
+                <skip_days>2</skip_days>
+            </ga4>
+        </scommerce_analytics_sync>
+    </default>
+</config>

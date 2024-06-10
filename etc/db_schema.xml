@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Scommerce Analytic Synch DB Schema
+ * @category   Scommerce
+ * @author     Scommerce Mage <core@scommerce-mage.com>
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="quote" resource="default">
+        <column xsi:type="text" name="sc_tracking_info" nullable="true" comment="Scommerce Tracking Information"/>
+    </table>
+    <table name="sales_order" resource="default">
+        <column xsi:type="text" name="sc_tracking_info" nullable="true" comment="Scommerce Tracking Information"/>
+        <column xsi:type="boolean" name="sc_transaction_sent" nullable="true" comment="Scommerce Transaction Sent to GA"/>
+        <column xsi:type="boolean" name="sc_transaction_sent_ga4" nullable="true" comment="Scommerce Transaction Sent to GA4"/>
+    </table>
+
+    <table name="sc_gasynclog" resource="default" engine="innodb" comment="GA Sync Log">
+        <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Log ID" />
+        <column xsi:type="varchar" name="increment_id" nullable="false" length="100" comment="Increment Id" />
+        <column xsi:type="text" name="tracking_data" nullable="false" comment="Tracking Data" />
+        <column xsi:type="varchar" name="status" nullable="false" length="50" comment="Status" />
+        <column xsi:type="varchar" name="error_message" length="1000" nullable="true" comment="Error Message" />
+        <column xsi:type="smallint" name="store_id" nullable="true" unsigned="true" comment="Store Id" />
+        <column xsi:type="datetime" name="created_at" nullable="false" comment="Created At" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="log_id" />
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SC_GASYNCLOG_STORE_ID_STORE_STORE_ID"
+                    table="sc_gasynclog" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="CASCADE"/>
+    </table>
+</schema>

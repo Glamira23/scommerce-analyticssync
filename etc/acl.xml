@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * AnalyticsSync ACL
+
+ * @category   Scommerce
+ * @author     Scommerce Mage <core@scommerce-mage.com>
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <!-- this resource id we can use in system.xml for section -->
+                            <resource id="Scommerce_AnalyticsSync::gasync" title="Scommerce Google Analytics Sync" sortOrder="10" />
+                        </resource>
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::system">
+                    <resource id="Scommerce_AnalyticsSync::gasynclog" title="Scommerce Manage GA Sync Logs" sortOrder="100">
+                        <resource id="Scommerce_AnalyticsSync::grid" title="GA Sync Logs" sortOrder="100" />
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

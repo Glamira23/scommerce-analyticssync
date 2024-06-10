@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/** AnalyticsSync adminhtml routes xml
+ * @category   Scommerce
+ * @author     Scommerce Mage <core@scommerce-mage.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="gasynclog" frontName="gasynclog">
+            <module name="Scommerce_AnalyticsSync" />
+        </route>
+    </router>
+</config>

@@ -1,13 +1,8 @@
 <?php
 /** @var $block Magento\Framework\View\Element\Template */
 $url = $block->getRequest()->getOriginalPathInfo();
-$viewModel = $block->getViewModel();
 if (!$url) {
     $url = "/";
-}
-$gaCookie = '';
-if ($gaCookie = $viewModel->getContainerId()) {
-    $gaCookie = '_ga_' . $gaCookie;
 }
 ?>
 <script>
@@ -51,13 +46,13 @@ if ($gaCookie = $viewModel->getContainerId()) {
                             gaClientId = clientId;
                             setCookie('scgacid', clientId);
                         } else if (window.gaGlobal != undefined) {
-                            setCookie('scgacid', window.gaGlobal.vid);
+                            setCookie('scgacid', window.gaGlobal);
                         }
                     });
                 } else {
                     resCookie.push("gab=1");
                     if (window.gaGlobal != undefined) {
-                        setCookie('scgacid', window.gaGlobal.vid);
+                        setCookie('scgacid', window.gaGlobal);
                     }
                 }
 
@@ -67,13 +62,6 @@ if ($gaCookie = $viewModel->getContainerId()) {
                     resCookie.push("gtmb=1");
                 }
                 setCookie('gagtmblock', resCookie.join("|||"));
-
-                <?php if ($gaCookie): ?>
-                let gaC = $.cookie('<?php echo $gaCookie; ?>');
-                if (gaC) {
-                    setCookie('scgacookie', gaC);
-                }
-                <?php endif; ?>
             }, 3000);
         }, false);
     });

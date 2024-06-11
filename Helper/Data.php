@@ -9,7 +9,6 @@
 namespace Scommerce\AnalyticsSync\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 use Scommerce\Core\Helper\Data as CoreHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
@@ -33,7 +32,6 @@ class Data extends AbstractHelper
     const XML_PATH_SECURITY_KEY         = 'scommerce_analytics_sync/general/security_key';
     const XML_PATH_GOOGLE_VIEW_ID       = 'scommerce_analytics_sync/general/google_view_id';
     const XML_PATH_ORDER_STATUS_EXCLUDE = 'scommerce_analytics_sync/general/order_status_exclude';
-    const XML_PATH_PAYMENT_METHODS_EXCLUDE      = 'scommerce_analytics_sync/general/payment_methods';
     const XML_PATH_ANALYTICS_ACCOUNT_ID = 'scommerce_analytics_sync/general/analytics_account_id';
     const XML_PATH_SEND_BASE_DATA       = 'scommerce_analytics_sync/general/send_base_data';
     const XML_PATH_SEND_PHONE_ORDER_TRANSACTION = 'scommerce_analytics_sync/general/send_phone_order_transaction';
@@ -52,8 +50,6 @@ class Data extends AbstractHelper
     const XML_PATH_API_SECRET           = 'scommerce_analytics_sync/ga4/api_secret';
     const XML_PATH_PROPERTY_ID          = 'scommerce_analytics_sync/ga4/property_id';
     const XML_PATH_GA4_SKIP_DAYS        = 'scommerce_analytics_sync/ga4/skip_days';
-    const XML_PATH_SEND_ON_INVOICE_CREATION = 'scommerce_analytics_sync/ga4/send_on_invoice_creation';
-
 
     const XML_PATH_LAST_CRON_RUN        = 'scommerce_analytics_sync/general/last_cron_run';
 
@@ -61,8 +57,6 @@ class Data extends AbstractHelper
      * @var CoreHelper
      */
     protected $_coreHelper;
-
-    protected $dateTime;
 
     /**
      * __construct
@@ -72,11 +66,9 @@ class Data extends AbstractHelper
      */
     public function __construct(
         Context $context,
-        CoreHelper $coreHelper,
-        DateTime $dateTime
+        CoreHelper $coreHelper
     ) {
         $this->_coreHelper = $coreHelper;
-        $this->dateTime = $dateTime;
         parent::__construct($context);
     }
 
@@ -138,12 +130,6 @@ class Data extends AbstractHelper
     public function getOrderStatusExclude($storeId = null)
     {
         $rawValue = $this->getValue(self::XML_PATH_ORDER_STATUS_EXCLUDE, ScopeInterface::SCOPE_STORE, $storeId);
-        return explode(',', $rawValue);
-    }
-
-    public function getExcludedPaymentMethods($storeId = null)
-    {
-        $rawValue = $this->getValue(self::XML_PATH_PAYMENT_METHODS_EXCLUDE, ScopeInterface::SCOPE_STORE, $storeId) ?? '';
         return explode(',', $rawValue);
     }
 
@@ -350,15 +336,6 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param $storeId
-     * @return mixed
-     */
-    public function sendOnInvoiceCreation($storeId = null)
-    {
-        return $this->getValue(self::XML_PATH_SEND_ON_INVOICE_CREATION, ScopeInterface::SCOPE_STORE, $storeId);
-    }
-
-    /**
      * @param $path
      * @param null $storeId
      * @return mixed
@@ -413,10 +390,5 @@ class Data extends AbstractHelper
     {
         $sku = strtolower(str_replace('\\Helper\\Data', '', str_replace('Scommerce\\', '', get_class($this))));
         return $this->_coreHelper->isLicenseValid($this->getLicenseKey(), $sku);
-    }
-
-    public function getTimestamp($date)
-    {
-        return $this->dateTime->gmtTimestamp($date);
     }
 }

@@ -188,15 +188,12 @@ class SynchronizerGa4 extends SyncBase
      * @param null $invoice
      * @throws NoSuchEntityException
      */
-    public function buildAndSendData($order, $storeId, $invoice = null)
+    protected function buildAndSendData($order, $storeId, $invoice = null)
     {
-        if (empty($this->_storeId)) {
-            $this->_storeId = $storeId;
-        }
         $orderId = $order->getIncrementId();
         $this->log('Building data for order == ' . $orderId);
 
-        $trackingData = $this->gaParseTSCookie($order, $storeId);
+        $this->gaParseTSCookie($order, $storeId);
         if (!$this->_cid) {
             $this->_cid = $this->genUuid();
         }
@@ -210,9 +207,6 @@ class SynchronizerGa4 extends SyncBase
             'name' => 'purchase',
             'params' => []
         ];
-        if ($trackingData && isset($trackingData['gsTimestamp'])) {
-            $data['timestamp_micros'] = $this->getTimestamp((int) $trackingData['gsTimestamp'], $order);
-        }
 
         if ($this->helper->getSendBaseData($storeId)) {
             $orderCurrency = $order->getBaseCurrencyCode();
@@ -238,20 +232,11 @@ class SynchronizerGa4 extends SyncBase
             'shipping' => (float)$orderShippingTotal,
             'tax' => (float)$orderTax
         ];
-
-        if ($this->isAdminOrder($order) && $this->helper->getSendPhoneOrderTransaction($storeId)) {
-            $data['events'][0]['params']['campaign_source'] = $this->helper->getAdminSource();
-            $data['events'][0]['params']['campaign_medium'] = $this->helper->getAdminMedium();
-        }
-
         if ($order->getCouponCode()) {
             $data['events'][0]['params']['coupon'] = $order->getCouponCode();
         }
         if ($order->getAffiliation()) {
             $data['events'][0]['params']['affiliation'] = $order->getAffiliation();
-        }
-        if ($trackingData && isset($trackingData['gsSessionId'])) {
-            $data['events'][0]['params']['session_id'] = (int) $trackingData['gsSessionId'];
         }
 
         if ($invoice === null) {
@@ -264,17 +249,6 @@ class SynchronizerGa4 extends SyncBase
         if ($result) {
             $this->updateProcessedTransactions([$orderId]);
         }
-    }
-
-    /** Returns Timestamp */
-    private function getTimestamp($currentStamp, $order)
-    {
-        $orderTs = $this->helper->getTimestamp($order->getCreatedAt());
-        $ts = $currentStamp / 1000000;
-        if ($ts < $orderTs) {
-            return $orderTs * 1000000;
-        }
-        return $currentStamp;
     }
 
     /**

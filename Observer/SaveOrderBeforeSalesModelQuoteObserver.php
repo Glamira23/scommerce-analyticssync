@@ -10,21 +10,17 @@ namespace Scommerce\AnalyticsSync\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Model\Order;
 use Magento\Quote\Model\Quote;
 use Scommerce\AnalyticsSync\Helper\Data;
-use Scommerce\AnalyticsSync\Model\GetTrackingData;
 
 class SaveOrderBeforeSalesModelQuoteObserver implements ObserverInterface
 {
-    const SC_TRACKING_INFO = 'sc_tracking_info';
-
     /**
      * @var string[]
      */
     private $attributes = [
-        self::SC_TRACKING_INFO
+        'sc_tracking_info'
     ];
 
     /**
@@ -33,28 +29,13 @@ class SaveOrderBeforeSalesModelQuoteObserver implements ObserverInterface
     protected $helper;
 
     /**
-     * @var GetTrackingData
-     */
-    protected $trackingData;
-
-    /**
-     * @var Json
-     */
-    protected $json;
-
-    /**
+     * SaveOrderBeforeSalesModelQuoteObserver constructor.
      * @param Data $helper
-     * @param GetTrackingData $trackingData
-     * @param Json $json
      */
     public function __construct(
-        Data $helper,
-        GetTrackingData $trackingData,
-        Json $json
+        Data $helper
     ) {
         $this->helper = $helper;
-        $this->trackingData = $trackingData;
-        $this->json = $json;
     }
 
     /**
@@ -72,32 +53,10 @@ class SaveOrderBeforeSalesModelQuoteObserver implements ObserverInterface
 
         foreach ($this->attributes as $attribute) {
             if ($quote->hasData($attribute)) {
-                $data = $quote->getData($attribute);
-                if ($attribute == self::SC_TRACKING_INFO) {
-                    if (is_null($data)) {
-                        continue;
-                    }
-                    $data = $this->addNewTimestamp($data);
-                }
-                $order->setData($attribute, $data);
+                $order->setData($attribute, $quote->getData($attribute));
             }
         }
 
         return $this;
-    }
-
-    protected function addNewTimestamp($data)
-    {
-        if ($data == null) {
-            return null;
-        }
-        $trackingData = $this->json->unserialize($data);
-
-        $newData = $this->trackingData->getContainerCookie();
-        if ($newData !== null && $newData['timestamp']) {
-            $trackingData['gsTimestamp'] = $newData['timestamp'];
-        }
-
-        return $this->json->serialize($trackingData);
     }
 }

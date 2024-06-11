@@ -8,7 +8,6 @@
 
 namespace Scommerce\AnalyticsSync\Console\Command;
 
-use Magento\Framework\Console\Cli;
 use Scommerce\AnalyticsSync\Model\AnalyticsSync;
 use Scommerce\AnalyticsSync\Model\Synchronizer;
 use Symfony\Component\Console\Input\InputInterface;
@@ -86,7 +85,5 @@ class Synchronize extends Command
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
         }
-
-        return Cli::RETURN_SUCCESS;
     }
 }

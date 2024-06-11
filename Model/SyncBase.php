@@ -212,14 +212,6 @@ abstract class SyncBase
     protected function getOrders($start, $end)
     {
         $collection = $this->orderCollectionFactory->create();
-        $sop = $collection->getTable('sales_order_payment');
-        $collection->getSelect()->joinLeft(
-            ['sop' => $sop],
-            'main_table.entity_id = sop.parent_id',
-            [
-                'method'
-            ]
-        );
         $collection->addFieldToFilter(
             'status',
             ['nin' => $this->helper->getOrderStatusExclude($this->_storeId)]
@@ -235,9 +227,6 @@ abstract class SyncBase
         )->addFieldToFilter(
             $this->getTransactionField(),
             [['neq' => 1], ['null' => true]]
-        )->addFieldToFilter(
-            'method',
-            ['nin' => $this->helper->getExcludedPaymentMethods($this->_storeId)]
         );
         $this->log('Orders select query == ' . (string)$collection->getSelect());
         return $collection->getItems();
@@ -277,7 +266,7 @@ abstract class SyncBase
     /**
      * @param $order
      * @param $storeId
-     * @return mixed
+     * @return void
      */
     protected function gaParseTSCookie($order, $storeId = null)
     {
@@ -303,14 +292,12 @@ abstract class SyncBase
                 if (isset($result['cnt']) && strtolower($result['cnt']) !== "(none)") {
                     $this->_cc = $result['cnt'];
                 }
-                return $result;
             }
         }
         if ($this->isAdminOrder($order) && $this->helper->getSendPhoneOrderTransaction($storeId)) {
             $this->_cs = $this->helper->getAdminSource($storeId);
             $this->_cm = $this->helper->getAdminMedium($storeId);
         }
-        return null;
     }
 
     /**

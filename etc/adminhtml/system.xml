@@ -123,15 +123,6 @@
                     </depends>
                     <comment><![CDATA[Exclude order statuses which you don't want to synch with Google Analytics]]></comment>
                 </field>
-                <field id="payment_methods" translate="label" type="multiselect" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Exclude Payment Methods</label>
-                    <source_model>Scommerce\AnalyticsSync\Model\Config\ActivePaymentMethods</source_model>
-                    <can_be_empty>1</can_be_empty>
-                    <depends>
-                        <field id="scommerce_analytics_sync/general/enabled">1</field>
-                    </depends>
-                    <comment>Select payment methods. For these payment methods data will not be send.</comment>
-                </field>
                 <field id="analytics_account_id"
                        translate="label comment"
                        type="text"
@@ -410,22 +401,6 @@ Example: 0 0 * Daily at midnight
                     <label>Skip Order days</label>
                     <comment><![CDATA[Number of days will be skipped before sending to GA4. Please put greater than 0 value. We would strongly recommend to set this to 2 days or more becuase GA4 transactions could take upto 48 hours to push to GA]]></comment>
                     <validate>validate-number validate-greater-than-zero</validate>
-                    <depends>
-                        <field id="scommerce_analytics_sync/general/enabled">1</field>
-                        <field id="scommerce_analytics_sync/ga4/enable">1</field>
-                    </depends>
-                </field>
-                <field id="send_on_invoice_creation"
-                       translate="label comment"
-                       type="select"
-                       sortOrder="30"
-                       showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1"
-                       canRestore="1">
-                    <label>Send GA4 data on invoice creation</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Use this option to send GA4 data on invoice creation</comment>
                     <depends>
                         <field id="scommerce_analytics_sync/general/enabled">1</field>
                         <field id="scommerce_analytics_sync/ga4/enable">1</field>

@@ -9,11 +9,7 @@
     <body>
         <referenceContainer name="before.body.end">
             <block class="Magento\Framework\View\Element\Template" name="sc.analytics.sync.tracking"
-                   template="Scommerce_AnalyticsSync::tracking.phtml" ifconfig="scommerce_analytics_sync/general/enabled">
-                <arguments>
-                    <argument name="view_model" xsi:type="object">Scommerce\AnalyticsSync\ViewModel\Tracking</argument>
-                </arguments>
-            </block>
+                   template="Scommerce_AnalyticsSync::tracking.phtml" ifconfig="scommerce_analytics_sync/general/enabled" />
         </referenceContainer>
     </body>
 </page>
